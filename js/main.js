@@ -10,8 +10,12 @@ var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 12, attribution: osmAttr
 
 var ggl = new L.Google();
 
+var baselayers = {"Satelital Google":ggl,"OpenStreetMap":osm};
+
 // add default layer
 map.addLayer(ggl);
 
+// create controls
+L.control.layers(baselayers,{}).addTo(map);
 
 //});
