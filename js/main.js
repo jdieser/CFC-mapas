@@ -1,5 +1,6 @@
 //$(function(){
 
-var map = new L.Map('map');
+// create map
+var map = new L.Map('map').setView([-40, -64], 4);
 
 //});
