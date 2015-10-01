@@ -9,14 +9,20 @@ var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> 
 var osm = new L.TileLayer(osmUrl, {minZoom: 3, attribution: osmAttrib});
 var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
 var ggl = new L.Google();
-
 var baselayers = {"Satelital Google":ggl,"OpenStreetMap":osm};
 
 // add default layer
 map.addLayer(ggl);
 
 // create controls
-L.control.layers(baselayers,{}).addTo(map);
+var selector = L.control.layers(baselayers,{}).addTo(map);
 L.control.minimap(osm2, { toggleDisplay: true }).addTo(map);
+
+
+$.getJSON("provincias.json", function(data){ 
+     var prov = L.geoJson(data).addTo(map);
+     
+     selector.addOverlay(prov,"Provincias");
+});
 
 //});
