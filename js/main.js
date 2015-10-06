@@ -34,4 +34,41 @@ $.getJSON("provincias.json", function(data){
      selector.addOverlay(prov,"Provincias");
 });
 
+// event functions
+function provEachFeature(feature, layer){
+      layer.on({
+            mouseover: mouseoverHandler,
+			mouseout: mouseoutHandler,
+			click: clickHandler
+      });
+}
+
+function mouseoverHandler(e) {
+	var feature = e.target;
+	// highlight feature
+	feature.setStyle({
+		weight: 2,
+		color: '#D60000',
+		dashArray: '',
+		fillOpacity: 0.5
+	});
+	if (!L.Browser.ie && !L.Browser.opera) feature.bringToFront();
+}
+
+function mouseoutHandler(e) {
+	//set default style
+	prov.resetStyle(e.target);
+}
+
+function clickHandler(e) {
+	//zoom to feature
+	map.fitBounds(e.target.getBounds());
+  	//remove mouseover handler
+  	map.eachLayer(function(layer){
+  		layer.off('mouseover', mouseoverHandler)
+  	})
+  	//set default style
+  	prov.resetStyle(e.target);
+}
+
 //});
