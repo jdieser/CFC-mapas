@@ -41,18 +41,20 @@ function provEachFeature(feature, layer){
 			mouseout: mouseoutHandler,
 			click: clickHandler
       });
+      //add labels
+      layer.bindLabel(feature.properties.provincia);
 }
 
 function mouseoverHandler(e) {
-	var feature = e.target;
+	var layer = e.target;
 	// highlight feature
-	feature.setStyle({
+	layer.setStyle({
 		weight: 2,
 		color: '#D60000',
 		dashArray: '',
 		fillOpacity: 0.5
 	});
-	if (!L.Browser.ie && !L.Browser.opera) feature.bringToFront();
+	if (!L.Browser.ie && !L.Browser.opera) layer.bringToFront();
 }
 
 function mouseoutHandler(e) {
@@ -61,14 +63,17 @@ function mouseoutHandler(e) {
 }
 
 function clickHandler(e) {
+	var feature = e.target
 	//zoom to feature
-	map.fitBounds(e.target.getBounds());
+	map.fitBounds(feature.getBounds());
   	//remove mouseover handler
   	map.eachLayer(function(layer){
   		layer.off('mouseover', mouseoverHandler)
   	})
   	//set default style
-  	prov.resetStyle(e.target);
+	prov.resetStyle(feature);
+	//remove feature label
+	feature.unbindLabel();
 }
 
 //});
