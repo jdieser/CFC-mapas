@@ -37,9 +37,9 @@ $.getJSON("provincias.json", function(data){
 // event functions
 function provEachFeature(feature, layer){
       layer.on({
-            mouseover: mouseoverHandler,
-			mouseout: mouseoutHandler,
-			click: clickHandler
+        mouseover: mouseoverHandler,
+        mouseout: mouseoutHandler,
+        click: clickHandler
       });
       //add labels
       layer.bindLabel(feature.properties.provincia);
@@ -66,14 +66,46 @@ function clickHandler(e) {
 	var feature = e.target
 	//zoom to feature
 	map.fitBounds(feature.getBounds());
-  	//remove mouseover handler
-  	map.eachLayer(function(layer){
-  		layer.off('mouseover', mouseoverHandler)
-  	})
-  	//set default style
+	//remove mouseover handler
+	map.eachLayer(function(layer){
+		layer.off('mouseover', mouseoverHandler)
+	})
+	//set default style
 	prov.resetStyle(feature);
 	//remove feature label
 	feature.unbindLabel();
+  //add layers to sidebar
+  fillSidebar(feature.feature);
 }
 
+//adds layer list to sidebar
+function fillSidebar(feature) {
+  //remove current list
+  $('ul.sidebar-nav .layer').remove();
+
+  if (feature.properties.wms_url) {
+    //hide abstract
+    $('#abstract').css('display', 'none');
+    //get wms layers 
+    getLayersList(feature.properties.wms_url);
+
+  } else {
+    //show abstract
+    $('#abstract').css('display', 'block');
+    $('#abstract p').text('No se encontró un servicio WMS para el Catastro de ' 
+      + feature.properties.provincia);
+  } 
+}
+
+function getLayersList(wms_url) {
+  var url = "wms_getlayers.php?url=" + wms_url;
+
+  $.getJSON(url, function(data) {
+    $.each(data, function(i, item) {
+      $('ul.sidebar-nav').append(
+        '<li class=\'layer\'><a href="#">' + item.title + '</a></li>'
+      );
+    });
+  });
+}
 //});
