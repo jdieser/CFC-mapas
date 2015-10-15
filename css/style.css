@@ -1,3 +1,10 @@
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0;}
+
 #map { height: 100% }
+
+#abstract {
+	color: #ffffff;
+	font-style: italic;
+	padding: 25px 5px 5px 5px;
+}
