@@ -21,12 +21,14 @@ L.control.minimap(osm2, { toggleDisplay: true }).addTo(map);
 // create geojson layer
 $.getJSON("provincias.json", function(data){ 
      prov = L.geoJson(data,{
-           style: {
-                 weight: 1,
-                 opacity: 1,
-                 color: 'white',
-                 dashArray: '3',
-                 fillOpacity: 0
+           style: function(feature) {
+              return { 
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: feature.properties.wms_url? 0.3 : 0
+              }
            },
            onEachFeature: provEachFeature
      }).addTo(map);
@@ -63,7 +65,7 @@ function mouseoutHandler(e) {
 }
 
 function clickHandler(e) {
-	var polygon = e.target
+  var polygon = e.target;
   active_prov = polygon.feature;
 	//zoom to feature
 	map.fitBounds(polygon.getBounds());
@@ -73,6 +75,8 @@ function clickHandler(e) {
 	})
 	//set default style
 	prov.resetStyle(polygon);
+  //remove fill color
+	polygon.setStyle({fillOpacity: 0});
 	//remove feature label
 	polygon.unbindLabel();
   //add layers to sidebar
