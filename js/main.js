@@ -10,12 +10,12 @@ var osm = new L.TileLayer(osmUrl, {minZoom: 3, attribution: osmAttrib});
 var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
 var ggl = new L.Google();
 var baselayers = {"Satelital Google":ggl,"OpenStreetMap":osm};
-var prov;
+var prov, active_prov;
 // add default layer
 map.addLayer(ggl);
 
 // create controls
-var selector = L.control.layers(baselayers,{}).addTo(map);
+var selector = L.control.layers(baselayers, {}, { collapsed:false }).addTo(map);
 L.control.minimap(osm2, { toggleDisplay: true }).addTo(map);
 
 // create geojson layer
@@ -46,15 +46,15 @@ function provEachFeature(feature, layer){
 }
 
 function mouseoverHandler(e) {
-	var layer = e.target;
+	var polygon = e.target;
 	// highlight feature
-	layer.setStyle({
+	polygon.setStyle({
 		weight: 2,
 		color: '#D60000',
 		dashArray: '',
 		fillOpacity: 0.5
 	});
-	if (!L.Browser.ie && !L.Browser.opera) layer.bringToFront();
+	if (!L.Browser.ie && !L.Browser.opera) polygon.bringToFront();
 }
 
 function mouseoutHandler(e) {
@@ -63,25 +63,25 @@ function mouseoutHandler(e) {
 }
 
 function clickHandler(e) {
-	var feature = e.target
+	var polygon = e.target
+  active_prov = polygon.feature;
 	//zoom to feature
-	map.fitBounds(feature.getBounds());
+	map.fitBounds(polygon.getBounds());
 	//remove mouseover handler
 	map.eachLayer(function(layer){
 		layer.off('mouseover', mouseoverHandler)
 	})
 	//set default style
-	prov.resetStyle(feature);
+	prov.resetStyle(polygon);
 	//remove feature label
-	feature.unbindLabel();
+	polygon.unbindLabel();
   //add layers to sidebar
-  fillSidebar(feature.feature);
+  listLayers(polygon.feature);
 }
 
-//adds layer list to sidebar
-function fillSidebar(feature) {
+function listLayers(provincia) {
   //remove current list
-  $('ul.sidebar-nav .layer').remove();
+  $('.layer').remove();
 
   if (feature.properties.wms_url) {
     //hide abstract
@@ -90,10 +90,10 @@ function fillSidebar(feature) {
     getLayersList(feature.properties.wms_url);
 
   } else {
-    //show abstract
+    //no wms message
     $('#abstract').css('display', 'block');
     $('#abstract p').text('No se encontró un servicio WMS para el Catastro de ' 
-      + feature.properties.provincia);
+      + provincia.properties.provincia);
   } 
 }
 
