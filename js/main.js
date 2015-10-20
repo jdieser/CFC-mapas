@@ -83,9 +83,10 @@ function listLayers(provincia) {
   //remove current list
   $('.layer').remove();
 
-  if (feature.properties.wms_url) {
-    //hide abstract
-    $('#abstract').css('display', 'none');
+  if (provincia.properties.wms_url) {
+    //loading message
+    $('#abstract').css('display', 'block');
+    $('#abstract p').text('Cargando capas...');
     //get wms layers 
     getLayersList(feature.properties.wms_url);
 
