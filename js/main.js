@@ -88,7 +88,7 @@ function listLayers(provincia) {
     $('#abstract').css('display', 'block');
     $('#abstract p').text('Cargando capas...');
     //get wms layers 
-    getLayersList(feature.properties.wms_url);
+    loadLayerList(provincia.properties.wms_url);
 
   } else {
     //no wms message
@@ -98,15 +98,35 @@ function listLayers(provincia) {
   } 
 }
 
-function getLayersList(wms_url) {
-  var url = "wms_getlayers.php?url=" + wms_url;
+//adds layer list to sidebar
+function loadLayerList(wms_url) {
+    var url = "wms_getlayers.php?url=" + wms_url;
+    //gets layer list from server
+    $.getJSON( url, function(data) {
+        //hide abstract
+        $('#abstract').css('display', 'none');
 
-  $.getJSON(url, function(data) {
-    $.each(data, function(i, item) {
-      $('ul.sidebar-nav').append(
-        '<li class=\'layer\'><a href="#">' + item.title + '</a></li>'
-      );
+        //add layers to ul
+        $.each(data, function(i, item) {
+          $('ul.sidebar-nav').append(
+            '<li class=\'layer\' data-layername=\'' + item.name + '\'><a href="#">' + item.title + '</a></li>'
+          );
+        });
+
+        setLiClickHandlers();
     });
-  });
+}
+
+function setLiClickHandlers() {
+    //adds layer when layer list item is clicked
+    $('.layer').click(function() {
+        var newLayer = L.tileLayer.wms( active_prov.properties.wms_url, {
+            layers: $(this).data("layername"),
+            format: 'image/png',
+            transparent: true
+        }).addTo(map);
+
+        selector.addOverlay(newLayer, $(this).text() + ' (' + active_prov.properties.provincia + ')');
+    });
 }
 //});
