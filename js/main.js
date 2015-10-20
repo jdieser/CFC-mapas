@@ -80,7 +80,9 @@ function clickHandler(e) {
 	//remove feature label
 	polygon.unbindLabel();
   //add layers to sidebar
-  listLayers(polygon.feature);
+  listLayers(active_prov);
+  //
+  $('#url p').text('WMS server: ' + (active_prov.properties.wms_url || '--'));
 }
 
 function listLayers(provincia) {

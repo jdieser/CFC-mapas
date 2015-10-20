@@ -10,3 +10,15 @@ body { height: 100%; margin: 0; padding: 0;}
 	padding: 10px;
 	text-indent: 0px;
 }
+
+#url {
+    position: fixed;
+    bottom: 0px;
+    width: 240px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px dashed #777;
+    border-radius: 5px;
+    color: #ccc;
+    word-wrap: break-word;
+}
