@@ -13,7 +13,7 @@ body { height: 100%; margin: 0; padding: 0;}
 
 #url {
     position: fixed;
-    bottom: 0px;
+    bottom: 40px;
     width: 240px;
     padding: 5px;
     margin: 5px;
@@ -21,4 +21,16 @@ body { height: 100%; margin: 0; padding: 0;}
     border-radius: 5px;
     color: #ccc;
     word-wrap: break-word;
+}
+
+#github {
+    position: fixed;
+    bottom: 0px;
+    margin: 0 0 0 60px;
+}
+
+#github iframe {
+    height: 20px;
+    width: 50px;
+    margin: 3px;
 }
