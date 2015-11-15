@@ -1,5 +1,6 @@
 //$(function(){
 
+var prov_json_url = "https://raw.githubusercontent.com/cristianzamar/CFC-mapas/master/provincias.json";
 // create map
 var map = new L.Map('map').setView([-40, -64], 4);
 
@@ -19,7 +20,7 @@ var selector = L.control.layers(baselayers, {}, { collapsed:false }).addTo(map);
 L.control.minimap(osm2, { toggleDisplay: true }).addTo(map);
 
 // create geojson layer
-$.getJSON("provincias.json", function(data){ 
+$.getJSON( prov_json_url, function(data){ 
 	prov = L.geoJson(data,{
 		style: function(feature) {
 			return { 
